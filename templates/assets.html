@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Assets - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Your Assets</h2>
+    <a href="{{ url_for('asset_add') }}" class="btn btn-primary">+ Add Asset</a>
+</div>
+
+{% if assets %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Provider</th>
+            <th>Value</th>
+            <th>Nominees</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for asset in assets %}
+        <tr>
+            <td>{{ asset.name }}</td>
+            <td>{{ asset.category }}</td>
+            <td>{{ asset.provider or "-" }}</td>
+            <td>{{ "%.2f"|format(asset.approx_value) }}</td>
+            <td>
+                {% if asset.nominees %}
+                    {{ asset.nominees | map(attribute="name") | join(", ") }}
+                {% else %}
+                    <span class="text-muted">None</span>
+                {% endif %}
+            </td>
+            <td class="actions">
+                <a href="{{ url_for('assign_nominee', asset_id=asset.id) }}" class="btn btn-small btn-outline">Nominees</a>
+                <a href="{{ url_for('asset_edit', asset_id=asset.id) }}" class="btn btn-small btn-outline">Edit</a>
+                <form method="POST" action="{{ url_for('asset_delete', asset_id=asset.id) }}" class="inline-form" onsubmit="return confirm('Delete this asset?');">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No assets yet. <a href="{{ url_for('asset_add') }}">Add your first asset</a>.</p>
+{% endif %}
+{% endblock %}

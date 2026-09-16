@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if asset else "Add" }} Asset - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h2>{{ "Edit Asset" if asset else "Add New Asset" }}</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Asset Name</label>
+            <input type="text" id="name" name="name" value="{{ asset.name if asset else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                {% set cats = ["Property", "Bank Account", "Insurance", "Vehicle", "Investment", "Other"] %}
+                {% for c in cats %}
+                <option value="{{ c }}" {% if asset and asset.category == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="provider">Provider / Institution</label>
+            <input type="text" id="provider" name="provider" value="{{ asset.provider if asset else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="reference">Reference / Account Number</label>
+            <input type="text" id="reference" name="reference" value="{{ asset.reference if asset else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="approx_value">Approximate Value</label>
+            <input type="number" step="0.01" id="approx_value" name="approx_value" value="{{ asset.approx_value if asset else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3">{{ asset.description if asset else '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ "Save Changes" if asset else "Add Asset" }}</button>
+            <a href="{{ url_for('assets_list') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

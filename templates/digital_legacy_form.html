@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if account else "Add" }} Digital Account - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h2>{{ "Edit Digital Account" if account else "Add Digital Account" }}</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="service">Service</label>
+            <input type="text" id="service" name="service" placeholder="e.g. Google, Facebook, Instagram" value="{{ account.service if account else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="account_identifier">Account Identifier</label>
+            <input type="text" id="account_identifier" name="account_identifier" placeholder="e.g. example@gmail.com" value="{{ account.account_identifier if account else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="action">Action</label>
+            <select id="action" name="action" required>
+                {% for a in actions %}
+                <option value="{{ a }}" {% if account and account.action == a %}selected{% endif %}>{{ a }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="beneficiary">Beneficiary (optional)</label>
+            <input type="text" id="beneficiary" name="beneficiary" placeholder="e.g. Brother" value="{{ account.beneficiary if account else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="instructions">Instructions (optional)</label>
+            <textarea id="instructions" name="instructions" rows="3" placeholder="Any special instructions for this account">{{ account.instructions if account else '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ "Save Changes" if account else "Add Digital Account" }}</button>
+            <a href="{{ url_for('digital_accounts_list') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

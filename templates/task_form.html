@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if task else "Add" }} Task - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h2>{{ "Edit Task" if task else "Add New Task" }}</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="title">Task Title</label>
+            <input type="text" id="title" name="title" placeholder="e.g. Contact Bank" value="{{ task.title if task else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3">{{ task.description if task else '' }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                {% for s in statuses %}
+                <option value="{{ s }}" {% if task and task.status == s %}selected{% elif not task and s == "Pending" %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ "Save Changes" if task else "Add Task" }}</button>
+            <a href="{{ url_for('tasks_list') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

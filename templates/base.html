@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Digital Legacy Vault{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    {% if current_user %}
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="{{ url_for('dashboard') }}">🔐 Digital Legacy Vault</a>
+        </div>
+        <div class="navbar-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('assets_list') }}">Assets</a>
+            <a href="{{ url_for('nominees_list') }}">Nominees</a>
+            <a href="{{ url_for('will_list') }}">Will</a>
+            <a href="{{ url_for('will_checker') }}">Checker</a>
+            <a href="{{ url_for('documents_list') }}">Documents</a>
+            <a href="{{ url_for('digital_accounts_list') }}">Digital Legacy</a>
+            <a href="{{ url_for('trusted_contacts_list') }}">Trusted Contact</a>
+            <a href="{{ url_for('life_verification') }}">Life Verification</a>
+            <a href="{{ url_for('tasks_list') }}">Tasks</a>
+        </div>
+        <div class="navbar-user">
+            <span>{{ current_user.full_name }}</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-small btn-outline">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Life Verification - Digital Legacy Vault{% endblock %}
+{% block content %}
+<h2>🫀 Life Verification</h2>
+<p class="text-muted">
+    This is a simulated "are you still with us" check-in. Missing it never
+    releases anything automatically — it only flags your account for review.
+</p>
+
+<div class="form-card" style="max-width: 520px; margin-left: 0;">
+    <table class="data-table">
+        <tr>
+            <th>Last Verification</th>
+            <td>{{ record.last_verified_at.strftime('%d %b %Y, %I:%M %p') if record.last_verified_at else '—' }}</td>
+        </tr>
+        <tr>
+            <th>Next Verification Due</th>
+            <td>{{ record.next_verification_due.strftime('%d %b %Y, %I:%M %p') }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>
+                {% if record.status == "OK" %}
+                    <span class="badge badge-pass">OK</span>
+                {% else %}
+                    <span class="badge badge-warning">VERIFICATION_REQUIRED</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Check-in Interval</th>
+            <td>Every {{ record.verification_interval_days }} days</td>
+        </tr>
+    </table>
+
+    {% if record.status != "OK" %}
+    <div class="flash flash-warning" style="margin-top: 1rem;">
+        ⚠️ Verification window missed. In a real system, your trusted contacts
+        would now be notified so they can look into it. No asset, document,
+        or digital account has been released or changed.
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 1.5rem; display:flex; gap: 0.75rem; flex-wrap: wrap;">
+        <form method="POST" action="{{ url_for('life_verification_confirm') }}">
+            <button type="submit" class="btn btn-primary">✅ Confirm I Am Alive</button>
+        </form>
+
+        <form method="POST" action="{{ url_for('life_verification_simulate_missed') }}">
+            <button type="submit" class="btn btn-outline">🧪 Simulate Missed Verification (demo)</button>
+        </form>
+    </div>
+</div>
+
+<p class="text-muted" style="margin-top: 1.5rem; font-size: 0.85rem;">
+    Note: "Simulate Missed Verification" is a demo/testing button only, so you
+    can show the VERIFICATION_REQUIRED state without waiting for the real
+    interval to pass.
+</p>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Assign Nominee - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h2>Nominees for "{{ asset.name }}"</h2>
+
+    {% if asset.nominees %}
+    <ul class="simple-list">
+        {% for nominee in asset.nominees %}
+        <li>
+            {{ nominee.name }} ({{ nominee.relationship_ }})
+            <form method="POST" action="{{ url_for('remove_nominee', asset_id=asset.id, nominee_id=nominee.id) }}" class="inline-form" onsubmit="return confirm('Remove this nominee from the asset?');">
+                <button type="submit" class="btn btn-small btn-danger">Remove</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty-state">No nominees assigned to this asset yet.</p>
+    {% endif %}
+
+    <hr>
+
+    <h3>Assign a Nominee</h3>
+    {% if all_nominees %}
+    <form method="POST">
+        <div class="form-group">
+            <label for="nominee_id">Select Nominee</label>
+            <select id="nominee_id" name="nominee_id" required>
+                <option value="" disabled selected>-- Choose Nominee --</option>
+                {% for nominee in all_nominees %}
+                <option value="{{ nominee.id }}">{{ nominee.name }} ({{ nominee.relationship_ }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Assign Nominee</button>
+            <a href="{{ url_for('assets_list') }}" class="btn btn-outline">Back to Assets</a>
+        </div>
+    </form>
+    {% else %}
+    <p class="empty-state">You have no nominees yet. <a href="{{ url_for('nominee_add') }}">Add one first</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}
