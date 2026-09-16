@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Digital Legacy Vault{% endblock %}
+{% block content %}
+
+<h3 class="fw-semibold mb-1">Welcome, {{ user.full_name }} 👋</h3>
+<p class="text-muted mb-4">This is your Digital Legacy Vault dashboard.</p>
+
+<div class="row g-3">
+  <div class="col-md-4 col-lg-2">
+    <div class="card text-center border-0 shadow-sm">
+      <div class="card-body">
+        <div class="fs-4 fw-bold">{{ stats.total_assets }}</div>
+        <div class="text-muted small">Assets</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-2">
+    <div class="card text-center border-0 shadow-sm">
+      <div class="card-body">
+        <div class="fs-4 fw-bold">{{ stats.total_nominees }}</div>
+        <div class="text-muted small">Nominees</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-2">
+    <div class="card text-center border-0 shadow-sm">
+      <div class="card-body">
+        <div class="fs-4 fw-bold">{{ stats.total_documents }}</div>
+        <div class="text-muted small">Documents</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-2">
+    <div class="card text-center border-0 shadow-sm">
+      <div class="card-body">
+        <div class="fs-4 fw-bold">{{ stats.total_will_instructions }}</div>
+        <div class="text-muted small">Will Instructions</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-2">
+    <div class="card text-center border-0 shadow-sm">
+      <div class="card-body">
+        <div class="fs-4 fw-bold">{{ stats.total_digital_accounts }}</div>
+        <div class="text-muted small">Digital Accounts</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-2">
+    <div class="card text-center border-0 shadow-sm">
+      <div class="card-body">
+        <div class="fs-4 fw-bold">{{ stats.total_tasks }}</div>
+        <div class="text-muted small">Tasks</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-info mt-4 small">
+  This is a Step 1 &amp; 2 prototype: project setup and authentication only.
+  Asset management, nominees, documents, will, AI checker, digital legacy,
+  trusted contacts, life verification and tasks will be added in later steps.
+</div>
+
+{% endblock %}

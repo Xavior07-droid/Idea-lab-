@@ -1,0 +1,21 @@
+body {
+  background-color: #f4f6f9;
+}
+
+.navbar {
+  background-color: #1f2937;
+}
+
+.card {
+  border-radius: 0.75rem;
+}
+
+.btn-primary {
+  background-color: #1f6feb;
+  border-color: #1f6feb;
+}
+
+.btn-primary:hover {
+  background-color: #1a5fce;
+  border-color: #1a5fce;
+}
