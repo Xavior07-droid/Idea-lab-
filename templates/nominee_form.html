@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit Nominee" if nominee else "Add Nominee" }} — Digital Legacy Vault{% endblock %}
+{% block content %}
+
+<h3 class="fw-semibold mb-4">{{ "Edit Nominee" if nominee else "Add New Nominee" }}</h3>
+
+<form method="POST" class="bg-white shadow-sm p-4 rounded" style="max-width: 600px;">
+  <div class="mb-3">
+    <label class="form-label">Name *</label>
+    <input type="text" name="name" class="form-control"
+           value="{{ form.name if form else (nominee.name if nominee else '') }}" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Relationship *</label>
+    <input type="text" name="relationship" class="form-control" placeholder="e.g. Mother, Brother, Spouse"
+           value="{{ form.relationship if form else (nominee.relationship if nominee else '') }}" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input type="email" name="email" class="form-control"
+           value="{{ form.email if form else (nominee.email if nominee and nominee.email else '') }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Phone</label>
+    <input type="text" name="phone" class="form-control"
+           value="{{ form.phone if form else (nominee.phone if nominee and nominee.phone else '') }}">
+  </div>
+
+  <button type="submit" class="btn btn-primary">{{ "Save Changes" if nominee else "Add Nominee" }}</button>
+  <a href="{{ url_for('nominees.list_nominees') }}" class="btn btn-outline-secondary">Cancel</a>
+</form>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Assign {{ nominee.name }} — Digital Legacy Vault{% endblock %}
+{% block content %}
+
+<h3 class="fw-semibold mb-1">Assign Assets to {{ nominee.name }}</h3>
+<p class="text-muted mb-4">Select which assets this nominee should be linked to.</p>
+
+{% if assets %}
+<form method="POST" class="bg-white shadow-sm p-4 rounded" style="max-width: 600px;">
+  {% for asset in assets %}
+  <div class="form-check mb-2">
+    <input class="form-check-input" type="checkbox" name="asset_ids" value="{{ asset.id }}"
+           id="asset-{{ asset.id }}" {{ "checked" if asset.id in assigned_ids else "" }}>
+    <label class="form-check-label" for="asset-{{ asset.id }}">
+      {{ asset.name }} <span class="text-muted small">({{ asset.category }})</span>
+    </label>
+  </div>
+  {% endfor %}
+
+  <button type="submit" class="btn btn-primary mt-3">Save Assignment</button>
+  <a href="{{ url_for('nominees.list_nominees') }}" class="btn btn-outline-secondary mt-3">Cancel</a>
+</form>
+{% else %}
+<div class="alert alert-info">
+  You don't have any assets yet. <a href="{{ url_for('assets.add_asset') }}">Add an asset</a> first, then come back to assign this nominee.
+</div>
+<a href="{{ url_for('nominees.list_nominees') }}" class="btn btn-link ps-0">&larr; Back to Nominees</a>
+{% endif %}
+
+{% endblock %}

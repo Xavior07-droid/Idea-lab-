@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Nominees — Digital Legacy Vault{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="fw-semibold mb-1">My Nominees</h3>
+    <p class="text-muted mb-0">People you've named to receive or manage your assets.</p>
+  </div>
+  <a href="{{ url_for('nominees.add_nominee') }}" class="btn btn-primary">+ Add Nominee</a>
+</div>
+
+{% if nominees %}
+<div class="table-responsive">
+  <table class="table align-middle bg-white shadow-sm">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Relationship</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Assigned Assets</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for nominee in nominees %}
+      <tr>
+        <td class="fw-semibold">{{ nominee.name }}</td>
+        <td><span class="badge bg-secondary">{{ nominee.relationship }}</span></td>
+        <td>{{ nominee.email or "—" }}</td>
+        <td>{{ nominee.phone or "—" }}</td>
+        <td>
+          {% set asset_list = nominee.assets.all() %}
+          {% if asset_list %}
+            {% for a in asset_list %}<span class="badge bg-light text-dark border">{{ a.name }}</span>{% endfor %}
+          {% else %}
+            <span class="text-muted small">None</span>
+          {% endif %}
+        </td>
+        <td class="text-end">
+          <a href="{{ url_for('nominees.assign_nominee', nominee_id=nominee.id) }}" class="btn btn-sm btn-outline-success">Assign</a>
+          <a href="{{ url_for('nominees.edit_nominee', nominee_id=nominee.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+          <form action="{{ url_for('nominees.delete_nominee', nominee_id=nominee.id) }}" method="POST" class="d-inline"
+                onsubmit="return confirm('Delete this nominee? This cannot be undone.');">
+            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info">
+  You haven't added any nominees yet. Click "Add Nominee" to get started.
+</div>
+{% endif %}
+
+<a href="{{ url_for('dashboard.index') }}" class="btn btn-link ps-0 mt-3">&larr; Back to Dashboard</a>
+
+{% endblock %}

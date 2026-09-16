@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit Asset" if asset else "Add Asset" }} — Digital Legacy Vault{% endblock %}
+{% block content %}
+
+<h3 class="fw-semibold mb-4">{{ "Edit Asset" if asset else "Add New Asset" }}</h3>
+
+<form method="POST" class="bg-white shadow-sm p-4 rounded" style="max-width: 600px;">
+  <div class="mb-3">
+    <label class="form-label">Name *</label>
+    <input type="text" name="name" class="form-control"
+           value="{{ form.name if form else (asset.name if asset else '') }}" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Category *</label>
+    <select name="category" class="form-select" required>
+      <option value="">-- Select category --</option>
+      {% for cat in categories %}
+      {% set current = form.category if form else (asset.category if asset else '') %}
+      <option value="{{ cat }}" {{ "selected" if cat == current else "" }}>{{ cat }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Provider</label>
+    <input type="text" name="provider" class="form-control" placeholder="e.g. HDFC Bank, LIC"
+           value="{{ form.provider if form else (asset.provider if asset and asset.provider else '') }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Reference</label>
+    <input type="text" name="reference" class="form-control" placeholder="e.g. Account no., Policy no."
+           value="{{ form.reference if form else (asset.reference if asset and asset.reference else '') }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Approximate Value</label>
+    <input type="number" step="0.01" name="approx_value" class="form-control" placeholder="e.g. 500000"
+           value="{{ form.approx_value if form else (asset.approx_value if asset and asset.approx_value is not none else '') }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea name="description" class="form-control" rows="3">{{ form.description if form else (asset.description if asset and asset.description else '') }}</textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">{{ "Save Changes" if asset else "Add Asset" }}</button>
+  <a href="{{ url_for('assets.list_assets') }}" class="btn btn-outline-secondary">Cancel</a>
+</form>
+
+{% endblock %}
