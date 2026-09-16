@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Welcome - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="hero">
+    <h1>🔐 Digital Legacy Vault</h1>
+    <p>Organize your assets, nominees and will instructions in one secure place.</p>
+    <div class="hero-actions">
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+        <a href="{{ url_for('register') }}" class="btn btn-outline">Create Account</a>
+    </div>
+</div>
+{% endblock %}

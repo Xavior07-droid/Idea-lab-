@@ -1,72 +1,110 @@
-# Digital Legacy Vault & Inheritance Management System
+# Digital Legacy Vault — Prototype (Steps 1–14)
 
-A college/final-year prototype for securely organizing and managing information
-about a person's assets, nominees, documents, will, and digital accounts, with
-a simulated life-verification and family-release workflow.
+A working Flask prototype for the Digital Legacy Vault & Inheritance
+Management System. All 14 build steps are implemented:
 
-**Status: Step 1 (Project Setup) and Step 2 (Registration / Login / Logout)
-are implemented.** All other modules (Assets, Nominees, Will, AI Checker,
-Documents, Digital Legacy, Trusted Contact, Life Verification, Tasks) exist
-as empty placeholder files and will be built in later steps.
+1. Project setup
+2. User registration / login / logout
+3. Dashboard
+4. Asset management (add / view / edit / delete)
+5. Nominee management (add / view / edit / delete, assign to assets)
+6. Will / Inheritance instructions (add / view / edit / delete)
+7. Will Checker (rule-based, no AI)
+8. Document Management (upload / view / download / delete — PDF, JPG, JPEG, PNG)
+9. Digital Legacy (digital accounts: add / view / edit / delete)
+10. Trusted Contact (add / view / edit / delete)
+11. Life Verification (simulation only — never auto-releases anything)
+12. Inheritance Tasks (add / view / edit / delete, quick status change)
+13. Everything connected via the dashboard and nav bar
+14. Demo data seeding (`seed_demo.py`)
 
-## Tech Stack
-- Backend: Python, Flask
-- Database: SQLite + SQLAlchemy
-- Frontend: HTML, Bootstrap 5
-- Security: Werkzeug password hashing, Flask sessions, `cryptography` (for later steps)
+## Run it as a pure terminal app (no browser)
 
-## Installation
+`cli.py` is a separate, menu-driven terminal program that talks directly
+to the same database — no Flask server, no browser involved at all.
 
 ```bash
-python -m venv venv
-venv\Scripts\activate      # Windows
-source venv/bin/activate   # macOS/Linux
-
+cd digital-legacy-vault
 pip install -r requirements.txt
-cp .env.example .env       # then edit .env with your own SECRET_KEY
+python cli.py
+```
+
+You'll get a numbered menu (Register, Login, Dashboard, Assets,
+Nominees, Will, Checker, Documents, Digital Legacy, Trusted Contacts,
+Life Verification, Tasks) — navigate by typing numbers and pressing
+Enter. Document upload asks for a file path already on your computer
+instead of a browser file picker.
+
+It shares `database/legacy_vault.db` with the web app (`app.py`), so
+data added in one shows up in the other. You can run `python cli.py`
+and `python app.py` at different times against the same data.
+
+## Run it locally
+
+```bash
+cd digital-legacy-vault
+
+# create a virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate      # Windows: venv\Scripts\activate
+
+# install dependencies
+pip install -r requirements.txt
+
+# run the app
 python app.py
 ```
 
-Visit **http://127.0.0.1:5000** in your browser.
+Then open **http://127.0.0.1:5000** in your browser.
 
-## What works right now
-- Register a new Vault Owner account (password is hashed, never stored in plain text)
-- Login with email/password
-- Basic login-attempt protection (account locks for 15 minutes after 5 failed attempts)
-- Session-based authentication with `login_required` protection on the dashboard
-- Logout
-- Every login/logout/registration event is written to the `audit_logs` table
-- Placeholder dashboard showing zeroed stat cards for future modules
+The SQLite database is created automatically at
+`database/legacy_vault.db` the first time you run the app.
 
-## Project Structure
-```
-digital-legacy-vault/
-├── app.py                 # Application factory + entry point
-├── config.py               # Configuration (reads from .env)
-├── extensions.py           # Shared SQLAlchemy db instance
-├── models/                 # SQLAlchemy models (user, audit done; rest are stubs)
-├── routes/                 # Flask blueprints (auth, dashboard done; rest are stubs)
-├── services/                # audit_service done; rest are stubs
-├── templates/               # Jinja2 templates (base/login/register/dashboard done)
-├── static/css, static/js
-├── database/                # legacy_vault.db created here at runtime
-└── uploads/                 # future document storage (outside static/)
+## Try it out — fastest way (with demo data)
+
+```bash
+python seed_demo.py
+python app.py
 ```
 
-## Security notes (Step 1–2)
-- Passwords hashed with `werkzeug.security.generate_password_hash`
-- Generic "Email or password is incorrect" message (no user enumeration)
-- Session cookies are HttpOnly, SameSite=Lax, and Secure in production
-- Session expires after 30 minutes of inactivity
-- No stack traces shown to users (custom error handlers)
+Log in with:
+- **Email:** demo@vault.local
+- **Password:** demo1234
 
-## Legal Disclaimer
-This application is an information-management and workflow prototype. It does
-not replace a legally valid will, legal advice, executor, court process,
-financial institution process, or applicable government procedure.
+This gives you 5 assets, 3 nominees, 3 will instructions, 2 digital
+accounts, 1 trusted contact, and 5 inheritance tasks already set up.
+One asset ("Mutual Fund") is intentionally left without a nominee or
+will instruction — open **Will → Checker** to see it flagged as a
+WARNING.
 
-## Next Steps
-See the project plan — Steps 3 through 15 will add the dashboard stats,
-asset/nominee/document/will management, the rule-based AI checker, digital
-legacy, trusted contacts, life verification, family dashboard, and inheritance
-tasks.
+## Try it out — manual walkthrough (no seed data)
+
+1. Register a new account.
+2. Log in — you'll land on the Dashboard.
+3. Add a couple of Assets (e.g. "Mumbai Property", "Bank Account").
+4. Add a couple of Nominees (e.g. "Mother", "Brother").
+5. From the Assets page, click **Nominees** on an asset to assign one.
+6. Go to **Will** and add an inheritance instruction, e.g.
+   Asset: Mumbai Property, Beneficiary: Mother,
+   Instruction: "Transfer property to mother".
+7. Open **Will → Checker** to see PASS/WARNING results.
+8. Upload a document under **Documents**.
+9. Add a digital account under **Digital Legacy**.
+10. Add a person under **Trusted Contact**.
+11. Open **Life Verification** — click "Confirm I Am Alive", then try
+    "Simulate Missed Verification" to see the VERIFICATION_REQUIRED
+    state (nothing is ever auto-released).
+12. Add a task under **Inheritance Tasks** and change its status.
+13. Logout from the top-right menu.
+
+## Notes on scope
+
+This is an intentionally lean prototype:
+- No email sending, no real identity verification, no payment/legal
+  integrations — Life Verification is a UI simulation only.
+- Passwords are hashed with Werkzeug's `generate_password_hash`, but
+  the Flask `SECRET_KEY` in `app.py` is a placeholder — change it
+  before any real deployment.
+- Single SQLite file, no migrations tooling (`db.create_all()` runs
+  on startup).
+

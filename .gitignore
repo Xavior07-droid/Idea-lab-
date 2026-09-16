@@ -1,8 +1,10 @@
 __pycache__/
-*.pyc
-venv/
+*.py[cod]
+*$py.class
+*.db
+*.sqlite3
+instance/
 .env
-database/*.db
-uploads/*
-!uploads/.gitkeep
-.pytest_cache/
+.venv
+venv/
+ENV/

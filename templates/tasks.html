@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Inheritance Tasks - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Inheritance Tasks</h2>
+    <a href="{{ url_for('task_add') }}" class="btn btn-primary">+ Add Task</a>
+</div>
+<p class="text-muted">
+    Post-inheritance checklist for whoever is handling the estate —
+    contacting banks, insurers, reviewing documents, and so on.
+</p>
+
+{% if tasks %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description or "-" }}</td>
+            <td>
+                {% if task.status == "Completed" %}
+                    <span class="badge badge-pass">Completed</span>
+                {% elif task.status == "In Progress" %}
+                    <span class="badge badge-action">In Progress</span>
+                {% else %}
+                    <span class="badge badge-warning">Pending</span>
+                {% endif %}
+            </td>
+            <td class="actions">
+                <form method="POST" action="{{ url_for('task_update_status', task_id=task.id) }}" class="inline-form">
+                    <select name="status" onchange="this.form.submit()" style="padding:4px 6px; border-radius:6px; border:1px solid var(--border);">
+                        {% for s in statuses %}
+                        <option value="{{ s }}" {% if task.status == s %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+                <a href="{{ url_for('task_edit', task_id=task.id) }}" class="btn btn-small btn-outline">Edit</a>
+                <form method="POST" action="{{ url_for('task_delete', task_id=task.id) }}" class="inline-form" onsubmit="return confirm('Delete this task?');">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No tasks yet. <a href="{{ url_for('task_add') }}">Add your first task</a>.</p>
+{% endif %}
+{% endblock %}
