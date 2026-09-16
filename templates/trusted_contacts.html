@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Trusted Contacts - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Trusted Contacts</h2>
+    <a href="{{ url_for('trusted_contact_add') }}" class="btn btn-primary">+ Add Trusted Contact</a>
+</div>
+
+<p class="text-muted">
+    Trusted contacts don't have access to your vault. They may only be
+    contacted as part of a future life-verification process, if you miss
+    your check-ins.
+</p>
+
+{% if contacts %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Relationship</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+        <tr>
+            <td>{{ contact.name }}</td>
+            <td>{{ contact.relationship_ }}</td>
+            <td>{{ contact.email or "-" }}</td>
+            <td>{{ contact.phone or "-" }}</td>
+            <td class="actions">
+                <a href="{{ url_for('trusted_contact_edit', contact_id=contact.id) }}" class="btn btn-small btn-outline">Edit</a>
+                <form method="POST" action="{{ url_for('trusted_contact_delete', contact_id=contact.id) }}" class="inline-form" onsubmit="return confirm('Delete this trusted contact?');">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No trusted contacts yet. <a href="{{ url_for('trusted_contact_add') }}">Add your first one</a>.</p>
+{% endif %}
+{% endblock %}

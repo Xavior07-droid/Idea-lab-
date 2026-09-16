@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Upload Document - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h2>Upload Document</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="file">File (PDF, JPG, JPEG, PNG — max 10 MB)</label>
+            <input type="file" id="file" name="file" accept=".pdf,.jpg,.jpeg,.png" required>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                {% set cats = ["Identity Proof", "Property Papers", "Insurance", "Bank Statement", "Investment", "Will", "Other"] %}
+                {% for c in cats %}
+                <option value="{{ c }}">{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3" placeholder="Optional notes about this document"></textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Upload</button>
+            <a href="{{ url_for('documents_list') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

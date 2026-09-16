@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Digital Legacy - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Digital Legacy</h2>
+    <a href="{{ url_for('digital_account_add') }}" class="btn btn-primary">+ Add Digital Account</a>
+</div>
+
+<p class="text-muted">
+    Keep a record of your online accounts and what should happen to each of
+    them — preserved, memorialized, transferred, or deleted.
+</p>
+
+{% if accounts %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Service</th>
+            <th>Account</th>
+            <th>Action</th>
+            <th>Beneficiary</th>
+            <th>Instructions</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for account in accounts %}
+        <tr>
+            <td>{{ account.service }}</td>
+            <td>{{ account.account_identifier }}</td>
+            <td><span class="badge badge-action">{{ account.action }}</span></td>
+            <td>{{ account.beneficiary or "-" }}</td>
+            <td>{{ account.instructions or "-" }}</td>
+            <td class="actions">
+                <a href="{{ url_for('digital_account_edit', account_id=account.id) }}" class="btn btn-small btn-outline">Edit</a>
+                <form method="POST" action="{{ url_for('digital_account_delete', account_id=account.id) }}" class="inline-form" onsubmit="return confirm('Delete this digital account?');">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No digital accounts yet. <a href="{{ url_for('digital_account_add') }}">Add your first one</a>.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Will Checker - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Will Checker</h2>
+    <a href="{{ url_for('will_list') }}" class="btn btn-outline">Back to Will</a>
+</div>
+
+<p class="text-muted">
+    A simple rule-based check of your vault — no AI involved. It looks for
+    assets missing will instructions, instructions pointing to missing assets,
+    assets without a nominee, and instructions without a beneficiary.
+</p>
+
+{% if not has_data %}
+<p class="empty-state">
+    You don't have any assets or will instructions yet. Add some first, then run the checker.
+</p>
+{% else %}
+<div class="stats-grid checker-summary">
+    <div class="stat-card">
+        <div class="stat-number" style="color: var(--success);">{{ pass_count }}</div>
+        <div class="stat-label">Passed Checks</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number" style="color: var(--warning);">{{ warning_count }}</div>
+        <div class="stat-label">Warnings</div>
+    </div>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Rule</th>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Detail</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in results %}
+        <tr>
+            <td>{{ r.rule }}</td>
+            <td>{{ r.subject }}</td>
+            <td>
+                {% if r.status == "PASS" %}
+                <span class="badge badge-pass">PASS</span>
+                {% else %}
+                <span class="badge badge-warning">WARNING</span>
+                {% endif %}
+            </td>
+            <td>{{ r.detail }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

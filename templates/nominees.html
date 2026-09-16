@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Nominees - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Your Nominees</h2>
+    <a href="{{ url_for('nominee_add') }}" class="btn btn-primary">+ Add Nominee</a>
+</div>
+
+{% if nominees %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Relationship</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Assigned Assets</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for nominee in nominees %}
+        <tr>
+            <td>{{ nominee.name }}</td>
+            <td>{{ nominee.relationship_ }}</td>
+            <td>{{ nominee.email or "-" }}</td>
+            <td>{{ nominee.phone or "-" }}</td>
+            <td>
+                {% if nominee.assets %}
+                    {{ nominee.assets | map(attribute="name") | join(", ") }}
+                {% else %}
+                    <span class="text-muted">None</span>
+                {% endif %}
+            </td>
+            <td class="actions">
+                <a href="{{ url_for('nominee_edit', nominee_id=nominee.id) }}" class="btn btn-small btn-outline">Edit</a>
+                <form method="POST" action="{{ url_for('nominee_delete', nominee_id=nominee.id) }}" class="inline-form" onsubmit="return confirm('Delete this nominee?');">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No nominees yet. <a href="{{ url_for('nominee_add') }}">Add your first nominee</a>.</p>
+{% endif %}
+{% endblock %}

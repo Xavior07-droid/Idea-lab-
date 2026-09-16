@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Digital Legacy Vault{% endblock %}
+{% block content %}
+<h2>Welcome, {{ current_user.full_name }}</h2>
+<p class="text-muted">Here is an overview of your Digital Legacy Vault.</p>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.assets }}</div>
+        <div class="stat-label">Total Assets</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.nominees }}</div>
+        <div class="stat-label">Total Nominees</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.documents }}</div>
+        <div class="stat-label">Total Documents</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.will_instructions }}</div>
+        <div class="stat-label">Will Instructions</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.digital_accounts }}</div>
+        <div class="stat-label">Digital Accounts</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.tasks }}</div>
+        <div class="stat-label">Tasks</div>
+    </div>
+</div>
+
+<div class="stats-grid" style="margin-top: 1rem;">
+    <div class="stat-card">
+        <div class="stat-number" style="font-size:1.1rem;">
+            {% if verification.status == "OK" %}
+                ✅ OK
+            {% else %}
+                ⚠️ VERIFICATION_REQUIRED
+            {% endif %}
+        </div>
+        <div class="stat-label">Life Verification Status</div>
+    </div>
+</div>
+
+<h3>Quick Access</h3>
+<div class="menu-grid">
+    <a href="{{ url_for('assets_list') }}" class="menu-card">📦 Assets</a>
+    <a href="{{ url_for('nominees_list') }}" class="menu-card">👪 Nominees</a>
+    <a href="{{ url_for('will_list') }}" class="menu-card">📜 Will Instructions</a>
+    <a href="{{ url_for('documents_list') }}" class="menu-card">📄 Documents</a>
+    <a href="{{ url_for('digital_accounts_list') }}" class="menu-card">💻 Digital Legacy</a>
+    <a href="{{ url_for('trusted_contacts_list') }}" class="menu-card">🤝 Trusted Contact</a>
+    <a href="{{ url_for('life_verification') }}" class="menu-card">🫀 Life Verification</a>
+    <a href="{{ url_for('tasks_list') }}" class="menu-card">✅ Inheritance Tasks</a>
+</div>
+{% endblock %}

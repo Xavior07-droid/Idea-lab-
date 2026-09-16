@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if instruction else "Add" }} Will Instruction - Digital Legacy Vault{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h2>{{ "Edit Will Instruction" if instruction else "Add Will Instruction" }}</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="asset_id">Asset (optional)</label>
+            <select id="asset_id" name="asset_id">
+                <option value="">-- No specific asset --</option>
+                {% for asset in user_assets %}
+                <option value="{{ asset.id }}" {% if instruction and instruction.asset_id == asset.id %}selected{% endif %}>{{ asset.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="beneficiary_name">Beneficiary</label>
+            <input type="text" id="beneficiary_name" name="beneficiary_name" placeholder="e.g. Mother" value="{{ instruction.beneficiary_name if instruction else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="instruction_text">Instruction</label>
+            <textarea id="instruction_text" name="instruction_text" rows="3" placeholder="e.g. Transfer property to mother" required>{{ instruction.instruction_text if instruction else '' }}</textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ "Save Changes" if instruction else "Add Instruction" }}</button>
+            <a href="{{ url_for('will_list') }}" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
